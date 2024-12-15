@@ -5,6 +5,18 @@
   text-align: center;
 }
 
+div {
+  margin: 20px;
+}
+
+h2 {
+  margin-bottom: 10px;
+}
+
+p {
+  line-height: 1.6;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
