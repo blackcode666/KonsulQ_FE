@@ -1,5 +1,6 @@
-import Beranda from './Beranda';
-import Navbar from './Navbar';
+import React from 'react';
+import Navbar from './components/Navbar';
+import Beranda from './components/Beranda';
 
 function App() {
   return (
