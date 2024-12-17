@@ -1,10 +1,10 @@
-import React from 'react';
-import googleLogo from '../assets/google.jpeg';
-import facebookLogo from '../assets/facebook.jpeg';
-import youtubeLogo from '../assets/youtube.jpeg';
-import pinterestLogo from '../assets/pinterest.jpeg';
-import twitchLogo from '../assets/twitch.jpeg';
-import webflowLogo from '../assets/webflow.jpeg';
+import googleLogo from "../../assets/google.jpeg";
+import facebookLogo from "../../assets/facebook.jpeg";
+import youtubeLogo from "../../assets/youtube.jpeg";
+import pinterestLogo from "../../assets/pinterest.jpeg";
+import twitchLogo from "../../assets/twitch.jpeg";
+import webflowLogo from "../../assets/webflow.jpeg";
+
 
 const Partners = () => {
   const partners = [

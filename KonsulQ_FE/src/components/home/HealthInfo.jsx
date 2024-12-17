@@ -1,5 +1,5 @@
 import React from 'react';
-import logoImage from '../assets/LOGO.png'; // Import LOGO.png
+import logoImage from "../../assets/LOGO.png";
 
 // Data untuk Health Info
 const healthInfoData = [
