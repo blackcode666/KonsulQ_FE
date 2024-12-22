@@ -1,26 +1,18 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import HeroSection from "../components/home/HeroSection";
 import HealthInfo from "../components/home/HealthInfo";
 import Partners from "../components/home/Partners";
 import Services from "../components/home/Services";
+import { Link } from "react-router-dom"; // Import Link untuk tombol
 
 const Home = () => {
   return (
-    <div>
+    <div className="min-h-screen bg-gray-50"> {/* Background gray untuk keseluruhan halaman */}
       <HeroSection />
       <HealthInfo />
       <Partners />
       <Services />
-      
-      {/* Button untuk menuju Dashboard */}
-      <div className="text-center mt-12">
-        <Link to="/dashboard">
-          <button className="px-6 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-all duration-300">
-            Masuk ke Dashboard
-          </button>
-        </Link>
-      </div>
+  
     </div>
   );
 };

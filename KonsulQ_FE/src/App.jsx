@@ -1,47 +1,28 @@
-import React, { useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
-import Dashboard from "./pages/Dashboard";
-import Navbar from "./components/common/Navbar";
-import Footer from "./components/common/Footer";
+import React from "react";
+import ReactDOM from "react-dom/client"; // Untuk React 18 ke atas
+import { BrowserRouter as Router } from "react-router-dom";
+import "@fortawesome/fontawesome-free/css/all.min.css";
+import "animate.css";
+import { AuthProvider } from "./context/AuthContext";
 
-const App = () => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+import Routing from "./router/Routing"; // Import file Routing.jsx
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen(prevState => !prevState);
-  };
+function App() {
   return (
-    <Router>
-      <Routes>
-        {/* Home */}
-        <Route
-          path="/"
-          element={
-            <>
-              <Navbar isDashboard={false} />
-              <Home />
-              <Footer />
-            </>
-          }
-        />
-
-        {/* Dashboard */}
-       <Route
-          path="/dashboard"
-          element={
-            <div className="flex flex-col min-h-screen">
-              <Navbar isDashboard={true} />
-              <div className="flex-grow">
-                <Dashboard />
-              </div>
-              <Footer />
-            </div>
-          }
-        />
-      </Routes>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Routing />
+      </Router>
+    </AuthProvider>
   );
-};
+}
+
+// Gunakan ReactDOM.createRoot untuk React 18 ke atas
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
 
 export default App;

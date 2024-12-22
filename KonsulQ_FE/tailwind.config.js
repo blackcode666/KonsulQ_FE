@@ -1,10 +1,14 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+module.exports = {
   content: [
-    "./src/**/*.{html,js,jsx,ts,tsx,css}", // Pastikan ini mencakup .css dan .html
+    "./src/**/*.{html,js,jsx,ts,tsx,css}", // Pastikan mencakup file HTML, JS, JSX, TSX, dan CSS
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['Poppins', 'sans-serif'], // Menambahkan font Poppins
+      },
+    },
   },
   plugins: [],
-}
+};

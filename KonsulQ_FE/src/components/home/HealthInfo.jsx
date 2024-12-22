@@ -1,14 +1,37 @@
-import React from 'react';
-import logoImage from "../../assets/LOGO.png";
+import React from "react";
 
 // Data untuk Health Info
 const healthInfoData = [
-  { id: 1, title: 'Dental treatments', image: logoImage },
-  { id: 2, title: 'Bones treatments', image: logoImage },
-  { id: 3, title: 'Diagnosis', image: logoImage },
-  { id: 4, title: 'Cardiology', image: logoImage },
-  { id: 5, title: 'Surgery', image: logoImage },
-  { id: 6, title: 'Eye care', image: logoImage },
+  {
+    id: 1,
+    title: "Dental treatments",
+    image: "https://images.pexels.com/photos/4269696/pexels-photo-4269696.jpeg", // Perawatan gigi
+  },
+  {
+    id: 2,
+    title: "Bones treatments",
+    image: "https://images.pexels.com/photos/5682847/pexels-photo-5682847.jpeg", // Perawatan tulang
+  },
+  {
+    id: 3,
+    title: "Diagnosis",
+    image: "https://images.pexels.com/photos/4226219/pexels-photo-4226219.jpeg", // Diagnosis
+  },
+  {
+    id: 4,
+    title: "Cardiology",
+    image: "https://images.pexels.com/photos/5207099/pexels-photo-5207099.jpeg", // Kardiologi
+  },
+  {
+    id: 5,
+    title: "Surgery",
+    image: "https://images.pexels.com/photos/3844581/pexels-photo-3844581.jpeg", // Operasi
+  },
+  {
+    id: 6,
+    title: "Eye care",
+    image: "https://images.pexels.com/photos/5327581/pexels-photo-5327581.jpeg", // Perawatan mata
+  },
 ];
 
 const HealthInfo = () => {
