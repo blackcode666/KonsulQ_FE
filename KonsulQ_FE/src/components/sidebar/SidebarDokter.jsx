@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import Logo from "../../assets/LOGO.png";
+import Logout from "./Logout"; 
 
 const SidebarDokter = () => {
   const location = useLocation();
@@ -45,10 +46,9 @@ const SidebarDokter = () => {
         ))}
       </ul>
 
+      {/* Sign Out Button */}
       <div className="absolute bottom-6 w-full">
-        <button className="w-full flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
-          <i className="fas fa-sign-out-alt mr-3 text-lg"></i> Sign Out
-        </button>
+        <Logout /> {/* Menggunakan komponen Logout */}
       </div>
     </div>
   );
