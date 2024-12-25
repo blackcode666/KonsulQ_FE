@@ -33,7 +33,7 @@ const Login = () => {
     const password = e.target.password.value;
 
     if (!email || !password) {
-      alert("Please fill in all fields.");
+      alert("Email dan password harus diisi.");
       return;
     }
 
@@ -50,7 +50,7 @@ const Login = () => {
 
       if (token) {
         localStorage.setItem("token", token);
-        alert(`Welcome back, ${user.name}!`);
+        alert(`Selamat datang, ${user.name}!`);
 
         
         const role = user.role ? user.role : 'user';  
@@ -59,11 +59,11 @@ const Login = () => {
 
         navigateBasedOnRole(role);  
       } else {
-        alert("Login failed. Token not received.");
+        alert("Login gagal silahkan cek email dan password anda.");
       }
     } catch (error) {
       console.error("Login Error:", error);
-      alert("Login failed. Please check your email and password.");
+      alert("Login gagal silahkan cek email dan password anda.");
     }
   };
 

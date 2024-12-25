@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext"; // Import useAuth dari AuthContext
 
-  const Navbar = () => {
+const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileView, setIsMobileView] = useState(false);
   const location = useLocation();
@@ -12,9 +12,11 @@ import { useAuth } from "../../context/AuthContext"; // Import useAuth dari Auth
 
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
 
+  const { logout } = useAuth();
+
   const handleLogout = () => {
-    setIsLoggedIn(false); // Set state login ke false saat logout
-    alert("Logout berhasil!");
+    logout();
+    navigate("/login");
   };
 
   useEffect(() => {
@@ -84,33 +86,29 @@ import { useAuth } from "../../context/AuthContext"; // Import useAuth dari Auth
           <nav className="hidden md:flex gap-6">
             <Link
               to="/"
-              className={`font-bold inline-block text-white hover:underline ${
-                location.pathname === "/" ? "border-b-2 border-white" : ""
-              }`}
+              className={`font-bold inline-block text-white hover:underline ${location.pathname === "/" ? "border-b-2 border-white" : ""
+                }`}
             >
               BERANDA
             </Link>
             <Link
               to="/riwayat"
-              className={`font-bold inline-block text-white hover:underline ${
-                location.pathname === "/riwayat" ? "border-b-2 border-white" : ""
-              }`}
+              className={`font-bold inline-block text-white hover:underline ${location.pathname === "/riwayat" ? "border-b-2 border-white" : ""
+                }`}
             >
               RIWAYAT
             </Link>
             <Link
               to="/artikel"
-              className={`font-bold inline-block text-white hover:underline ${
-                location.pathname === "/artikel" ? "border-b-2 border-white" : ""
-              }`}
+              className={`font-bold inline-block text-white hover:underline ${location.pathname === "/artikel" ? "border-b-2 border-white" : ""
+                }`}
             >
               ARTIKEL
             </Link>
             <Link
               to="/about"
-              className={`font-bold inline-block text-white hover:underline ${
-                location.pathname === "/about" ? "border-b-2 border-white" : ""
-              }`}
+              className={`font-bold inline-block text-white hover:underline ${location.pathname === "/about" ? "border-b-2 border-white" : ""
+                }`}
             >
               TENTANG
             </Link>
@@ -206,7 +204,7 @@ import { useAuth } from "../../context/AuthContext"; // Import useAuth dari Auth
             </li>
             <li>
               <Link
-                to="/dashboard"
+                to="/dashboard-pasien"
                 className="block px-4 py-2 text-gray-700 hover:bg-teal-100"
               >
                 Dashboard
