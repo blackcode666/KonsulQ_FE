@@ -1,6 +1,6 @@
 import React from "react";
 import SidebarAdmin from "../../components/sidebar/SidebarAdmin"; // Pastikan jalur SidebarAdmin benar
-import NavbarAdmin from "../../components/navbar/NavbarAdmin"; // Pastikan jalur NavbarAdmin benar
+import Navbar from "../../components/navbar/Navbar"; // Pastikan jalur Navbar benar
 
 const ManageUsersLayout = ({ users }) => {
   return (

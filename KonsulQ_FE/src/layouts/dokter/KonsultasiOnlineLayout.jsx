@@ -1,6 +1,6 @@
 import React from "react";
 import SidebarDokter from "../../components/sidebar/SidebarDokter";
-import NavbarDokter from "../../components/navbar/NavbarDokter";
+import Navbar from "../../components/navbar/Navbar";
 
 const KonsultasiOnlineLayout = ({ consultations }) => {
   return (
