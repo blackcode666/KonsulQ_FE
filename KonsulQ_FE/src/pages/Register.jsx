@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import LRImage from "../assets/LR.png";
 import RightImage from "../assets/1.png";
 import { auth, provider, signInWithPopup } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Register = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleGoogleSignIn = async () => {
     try {
@@ -20,7 +23,7 @@ const Register = () => {
     }
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     const name = e.target.name.value;
     const email = e.target.email.value;
@@ -31,11 +34,28 @@ const Register = () => {
       return;
     }
 
-    console.log("Name:", name, "Email:", email, "Password:", password);
-    alert(`Registrasi berhasil, ${name}! Silakan login dengan akun Anda.`);
-    navigate("/login"); // Redirect ke halaman login
-  };
+    setLoading(true);
+    setError(null);
 
+    try {
+      // Kirim data ke API Laravel
+      const response = await axios.post("https://techsign.store/api/register", {
+        name: name,
+        email: email,
+        password: password,
+      });
+
+      if (response.data.status === "success") {
+        alert(`Registrasi berhasil, ${name}! Silakan login dengan akun Anda.`);
+        navigate("/login"); // Redirect ke halaman login
+      }
+    } catch (error) {
+      console.error("Registration Error:", error);
+      setError("Registrasi gagal. Silakan coba lagi.");
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="flex flex-col lg:flex-row min-h-screen bg-gray-500">
       {/* Left Section - Form */}
@@ -90,12 +110,14 @@ const Register = () => {
             <div className="flex items-center">
               <input
                 type="checkbox"
+                id="kebijakan"
                 className="h-5 w-5 text-green-600 focus:ring-green-500 border-gray-300 rounded"
                 required
               />
-              <label className="ml-3 text-sm text-gray-600">
+              <label htmlFor="kebijakan" className="ml-3 text-sm text-gray-600">
                 Saya setuju dengan syarat dan kebijakan
               </label>
+
             </div>
             <button
               type="submit"
