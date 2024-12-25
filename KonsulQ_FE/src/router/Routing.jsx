@@ -66,7 +66,7 @@ const Routing = () => {
 
       {/* Admin Routes */}
       <Route path="/dashboard-admin" element={<Middleware allowedRoles={['admin']}><DashboardAdmin /></Middleware>} />
-      <Route path="/manage-users" element={<Middleware allowedRoles={['admin']}><ManageUsers /></Middleware>} />
+      <Route path="/manage-pasien" element={<Middleware allowedRoles={['admin']}><ManageUsers /></Middleware>} />
       <Route path="/manage-doctors" element={<Middleware allowedRoles={['admin']}><ManageDoctors /></Middleware>} />
       <Route path="/manage-consultations" element={<Middleware allowedRoles={['admin']}><ManageConsultations /></Middleware>} />
       <Route path="/reports" element={<Middleware allowedRoles={['admin']}><Reports /></Middleware>} />

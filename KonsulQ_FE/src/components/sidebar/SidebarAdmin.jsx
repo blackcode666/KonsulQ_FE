@@ -8,7 +8,7 @@ const SidebarAdmin = () => {
 
   const menus = [
     { name: "Dashboard", icon: "fas fa-tachometer-alt", path: "/dashboard-admin" },
-    { name: "Manajemen Pengguna", icon: "fas fa-users", path: "/manage-users" },
+    { name: "Manajemen Pasien", icon: "fas fa-users", path: "/manage-pasien" },
     { name: "Manajemen Dokter", icon: "fas fa-user-md", path: "/manage-doctors" },
     { name: "Manajemen Konsultasi", icon: "fas fa-comments", path: "/manage-consultations" },
     { name: "Laporan", icon: "fas fa-chart-line", path: "/reports" },
