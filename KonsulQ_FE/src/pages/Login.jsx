@@ -3,8 +3,11 @@ import LRImage from "../assets/LR.png";
 import RightImage from "../assets/1.png";
 import { auth, provider, signInWithPopup, signInWithEmailAndPassword } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useAuth } from "../context/AuthContext";  
 
 const Login = () => {
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleGoogleSignIn = async () => {
@@ -13,7 +16,11 @@ const Login = () => {
       const user = result.user;
       console.log("User Info:", user);
       alert(`Welcome back, ${user.displayName}!`);
-      navigate("/"); // Redirect to home page after successful login
+
+      
+      login({ ...user, role: user.role || 'user' });  
+
+      navigateBasedOnRole(user.role);  
     } catch (error) {
       console.error("Google Sign-In Error:", error);
       alert("Login failed. Please try again.");
@@ -31,16 +38,48 @@ const Login = () => {
     }
 
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-      console.log("User Info:", user);
-      alert(`Welcome back, ${user.email}!`);
-      navigate("/"); // Redirect to home page after successful login
+      const response = await axios.post("https://techsign.store/api/login", {
+        email,
+        password,
+      });
+
+      console.log("API Response:", response.data); 
+
+      const token = response.data.token;
+      const user = response.data.user;
+
+      if (token) {
+        localStorage.setItem("token", token);
+        alert(`Welcome back, ${user.name}!`);
+
+        
+        const role = user.role ? user.role : 'user';  
+
+        login({ ...user, role });  
+
+        navigateBasedOnRole(role);  
+      } else {
+        alert("Login failed. Token not received.");
+      }
     } catch (error) {
-      console.error("Email Login Error:", error);
+      console.error("Login Error:", error);
       alert("Login failed. Please check your email and password.");
     }
   };
+
+
+  const navigateBasedOnRole = (role) => {
+    if (role === "admin") {
+      navigate("/dashboard-admin");
+    } else if (role === "doctor") {
+      navigate("/dashboard-dokter");
+    } else if (role === "patient") {
+      navigate("/dashboard-pasien");
+    } else {
+      navigate("/");  
+    }
+  };
+
 
   return (
     <div className="flex flex-col lg:flex-row min-h-screen bg-gray-500">
@@ -52,43 +91,68 @@ const Login = () => {
         </div>
         <div className="w-full max-w-lg">
           <h2 className="text-4xl font-bold mb-6 text-gray-800 text-center">
-            Selamat Datang 
+            Selamat Datang
           </h2>
           <p className="text-gray-600 mb-10 text-center">
             Masuk untuk melanjutkan
           </p>
           <form className="space-y-6" onSubmit={handleFormSubmit}>
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Alamat Email
               </label>
               <input
                 type="email"
                 id="email"
                 name="email"
+                required
                 className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
-                placeholder="Masukkan Email kamu ya"
+                placeholder="Masukkan email kamu"
+                aria-describedby="email-helper"
               />
+              <small
+                id="email-helper"
+                className="text-sm text-gray-500"
+              >
+                Contoh: email@example.com
+              </small>
             </div>
+
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700"
+              >
                 Password
               </label>
               <input
                 type="password"
                 id="password"
                 name="password"
+                required
                 className="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-green-500 focus:border-green-500"
                 placeholder="Masukkan password kamu"
+                aria-describedby="password-helper"
               />
+              <small
+                id="password-helper"
+                className="text-sm text-gray-500"
+              >
+                Password minimal 8 karakter.
+              </small>
             </div>
+
             <button
               type="submit"
-              className="w-full bg-green-600 text-white py-3 px-4 rounded-md text-lg font-medium hover:bg-green-700"
+              className="w-full bg-green-600 text-white py-3 px-4 rounded-md text-lg font-medium hover:bg-green-700 focus:ring-4 focus:ring-green-500 focus:outline-none"
             >
               Masuk
             </button>
           </form>
+
           <div className="text-center mt-10">
             <p className="text-sm text-gray-600 mb-5">Atau masuk menggunakan</p>
             <div className="flex flex-col space-y-3">

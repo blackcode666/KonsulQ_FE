@@ -1,13 +1,36 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import AdminLayout from "../../layouts/admin/AdminLayout";
 import ManageUsersLayout from "../../layouts/admin/ManageUsersLayout";
 
 const ManageUsers = () => {
-  const users = [
-    { name: "Ola Akintola", date: "12-09-2023", room: "UI/201", id: "02566", service: "Konsultasi Chat" },
-    { name: "Janet Paul", date: "12-09-2023", room: "AC/32", id: "07634", service: "Konsultasi Video Call" },
-    { name: "Areogun Joe", date: "12-09-2023", room: "AG/45", id: "02990", service: "Konsultasi Chat" },
-  ];
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const token = localStorage.getItem("token"); // Ambil token dari localStorage
+        const response = await axios.get("https://techsign.store/api/user", {
+          headers: {
+            Authorization: `Bearer ${token}`, // Tambahkan header Authorization
+          },
+        });
+        const usersData = response.data.data; // Sesuaikan dengan struktur respons API
+        setUsers(usersData);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <AdminLayout>
