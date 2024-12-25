@@ -30,7 +30,7 @@ const DashboardAdmin = () => {
     patients: 0,
     consultations: 0,
     cancelled: 0,
-
+    
   });
   const [loading, setLoading] = useState(true);
 
@@ -49,13 +49,13 @@ const DashboardAdmin = () => {
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
         
-        const userResponse = await axios.get("https:
+        const userResponse = await axios.get("https://techsign.store/api/users");
         
         const doctorCount = userResponse.data.data.filter(user => user.role === 'doctor').length;
         const patientCount = userResponse.data.data.filter(user => user.role === 'patient').length;
 
         
-        const consultationResponse = await axios.get("https:
+        const consultationResponse = await axios.get("https://techsign.store/api/appointments");
         const consultationData = consultationResponse.data;
         const cancelledConsultations = consultationData.filter((consul) => consul.status === "canceled");
         const scheduledConsultations = consultationData.filter((consul) => consul.status !== "canceled");
