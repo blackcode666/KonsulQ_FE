@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import AdminLayout from "../../layouts/admin/AdminLayout";
 import { Pie, Line } from "react-chartjs-2";
 import {
@@ -12,7 +13,7 @@ import {
   Legend,
 } from "chart.js";
 
-// Registrasi komponen Chart.js
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -24,66 +25,121 @@ ChartJS.register(
 );
 
 const DashboardAdmin = () => {
-  // Data Cards
-  const cards = [
-    {
-      title: "Jumlah Dokter Terdaftar",
-      value: 50,
-      growth: "+8% dari kemarin",
-      bg: "bg-red-100",
-      text: "text-red-500",
-      icon: "fas fa-user-md",
-    },
-    {
-      title: "Total Pasien Terdaftar",
-      value: 300,
-      growth: "+5% dari kemarin",
-      bg: "bg-yellow-100",
-      text: "text-yellow-500",
-      icon: "fas fa-users",
-    },
-    {
-      title: "Konsultasi Berlangsung",
-      value: 5,
-      growth: "+1.2% dari kemarin",
-      bg: "bg-green-100",
-      text: "text-green-500",
-      icon: "fas fa-comments",
-    },
-    {
-      title: "Konsultasi Dibatalkan",
-      value: 8,
-      growth: "+0.5% dari kemarin",
-      bg: "bg-purple-100",
-      text: "text-purple-500",
-      icon: "fas fa-calendar-times",
-    },
-  ];
+  const [stats, setStats] = useState({
+    doctors: 0,
+    patients: 0,
+    consultations: 0,
+    cancelled: 0,
 
-  // Data untuk Pie Chart
+  });
+  const [loading, setLoading] = useState(true);
+
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        console.error("Token tidak ditemukan");
+        return;
+      }
+
+      try {
+        
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+        
+        const userResponse = await axios.get("https:
+        
+        const doctorCount = userResponse.data.data.filter(user => user.role === 'doctor').length;
+        const patientCount = userResponse.data.data.filter(user => user.role === 'patient').length;
+
+        
+        const consultationResponse = await axios.get("https:
+        const consultationData = consultationResponse.data;
+        const cancelledConsultations = consultationData.filter((consul) => consul.status === "canceled");
+        const scheduledConsultations = consultationData.filter((consul) => consul.status !== "canceled");
+        console.log("Scheduled Consultations:", scheduledConsultations.length);
+
+        
+        setStats({
+          doctors: doctorCount,
+          patients: patientCount,
+          consultations: scheduledConsultations.length,
+          cancelled: cancelledConsultations.length,
+        });
+        
+        const lastWeekDate = new Date();
+        lastWeekDate.setDate(lastWeekDate.getDate() - 7); 
+
+        
+        const recentConsultations = scheduledConsultations.filter((consultation) => {
+          const appointmentDate = new Date(consultation.appointment_time);
+          return appointmentDate >= lastWeekDate;
+        });
+
+        
+        const consultationsByDay = [0, 0, 0, 0, 0, 0, 0]; 
+        recentConsultations.forEach((consultation) => {
+          const appointmentDate = new Date(consultation.appointment_time);
+          const dayOfWeek = appointmentDate.getDay(); 
+          consultationsByDay[dayOfWeek]++;
+        });
+
+        
+        setLineData({
+          labels: ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"], 
+          datasets: [
+            {
+              label: "Konsultasi Mingguan",
+              data: consultationsByDay, 
+              borderColor: "#34D399",
+              backgroundColor: "rgba(52, 211, 153, 0.3)",
+              tension: 0.4,
+              fill: true,
+            },
+          ],
+        });
+
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []); 
+
+  
+  const [lineData, setLineData] = useState({
+    labels: ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"],
+    datasets: [
+      {
+        label: "Konsultasi Mingguan",
+        data: [0, 0, 0, 0, 0, 0, 0], 
+        borderColor: "#34D399",
+        backgroundColor: "rgba(52, 211, 153, 0.3)",
+        tension: 0.4,
+        fill: true,
+      },
+    ],
+  });
+
+  
   const pieData = {
     labels: ["Dokter Terdaftar", "Pasien Terdaftar", "Berlangsung", "Dibatalkan"],
     datasets: [
       {
         label: "Jumlah",
-        data: [50, 300, 5, 8], // Data diambil dari card
+        data: [
+          stats.doctors,
+          stats.patients,
+          stats.consultations,
+          stats.cancelled,
+        ],
         backgroundColor: ["#F87171", "#FBBF24", "#34D399", "#9F7AEA"],
         hoverBackgroundColor: ["#FCA5A5", "#FDE68A", "#6EE7B7", "#C4B5FD"],
-      },
-    ],
-  };
-
-  // Data untuk Line Chart
-  const lineData = {
-    labels: ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"],
-    datasets: [
-      {
-        label: "Konsultasi Mingguan",
-        data: [10, 20, 15, 25, 30, 28, 35], // Contoh data
-        borderColor: "#34D399",
-        backgroundColor: "rgba(52, 211, 153, 0.3)",
-        tension: 0.4,
-        fill: true,
       },
     ],
   };
@@ -102,7 +158,40 @@ const DashboardAdmin = () => {
       <div className="bg-gray-100 min-h-screen p-6">
         {/* Statistik Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-          {cards.map((card, index) => (
+          {[
+            {
+              title: "Jumlah Dokter Terdaftar",
+              value: stats.doctors,
+              growth: "+8% dari kemarin",
+              bg: "bg-red-100",
+              text: "text-red-500",
+              icon: "fas fa-user-md",
+            },
+            {
+              title: "Total Pasien Terdaftar",
+              value: stats.patients,
+              growth: "+5% dari kemarin",
+              bg: "bg-yellow-100",
+              text: "text-yellow-500",
+              icon: "fas fa-users",
+            },
+            {
+              title: "Konsultasi Berlangsung",
+              value: stats.consultations - stats.cancelled,
+              growth: "+1.2% dari kemarin",
+              bg: "bg-green-100",
+              text: "text-green-500",
+              icon: "fas fa-comments",
+            },
+            {
+              title: "Konsultasi Dibatalkan",
+              value: stats.cancelled,
+              growth: "+0.5% dari kemarin",
+              bg: "bg-purple-100",
+              text: "text-purple-500",
+              icon: "fas fa-calendar-times",
+            },
+          ].map((card, index) => (
             <div
               key={index}
               className={`p-6 rounded-lg shadow-md ${card.bg} flex items-center justify-between`}
