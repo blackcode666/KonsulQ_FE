@@ -1,22 +1,40 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../utils/firebase"; // Pastikan jalur import benar
+import { useAuth } from "../context/AuthContext"; 
 
-const Middleware = ({ children }) => {
+const Middleware = ({ children, allowedRoles }) => {
   const navigate = useNavigate();
+  const { userInfo } = useAuth(); 
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
-      if (!user) {
-        navigate("/login"); // Redirect ke halaman login jika belum login
+    
+    if (!userInfo) {
+      console.log("User not loaded yet");
+      return;
+    }
+
+    
+    if (!userInfo) {
+      navigate("/login");
+    } else if (allowedRoles && !allowedRoles.includes(userInfo?.role)) {
+      
+      alert("Anda tidak memiliki izin untuk mengakses halaman ini.");
+      if (userInfo?.role === "admin") {
+        navigate("/dashboard-admin");
+      } else if (userInfo?.role === "doctor") {
+        navigate("/dashboard-dokter");
+      } else if (userInfo?.role === "patient") {
+        navigate("/dashboard-pasien");
       }
-    });
+    }
+  }, [navigate, userInfo, allowedRoles]);
 
-    // Cleanup untuk listener Firebase
-    return () => unsubscribe();
-  }, [navigate]);
+  
+  if (!userInfo) {
+    return <div>Loading...</div>; 
+  }
 
-  return children; // Jika user terautentikasi, render children
+  return children; 
 };
 
 export default Middleware;
