@@ -97,11 +97,15 @@ const RiwayatKonsultasi = () => {
                           className="bg-blue-500 text-white py-1 px-1 rounded hover:bg-blue-600 transition duration-200"
                           href={`/konsultasi/${appointment.id}`}
                         >
-                          Join
+                          masuk
                         </a>
-                      ) : (
-                        <span>-</span>
-                      )}
+                      ): ""}
+                      <a
+                        className="bg-gray-500 text-white py-1 px-1 rounded hover:bg-gray-600 transition duration-200"
+                        href={`/pembayaran`}
+                      >
+                        bayar
+                      </a>
                     </td>
 
                   </tr>

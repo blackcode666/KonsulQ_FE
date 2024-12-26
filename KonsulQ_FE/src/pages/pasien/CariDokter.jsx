@@ -15,7 +15,7 @@ const CariDokter = () => {
     doctor_id: "",
     appointment_start: "",
     appointment_end: "",
-    status: "scheduled",
+    status: "pending",
     details: "",
     total_time: 0, // Tambahkan properti untuk total jam
     total_price: 0, // Tambahkan properti untuk total harga

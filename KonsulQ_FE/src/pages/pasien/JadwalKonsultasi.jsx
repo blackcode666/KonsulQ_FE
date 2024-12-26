@@ -35,7 +35,7 @@ const JadwalKonsultasi = () => {
         const scheduledAppointments = response.data.filter(
           (appointment) => appointment.status === "scheduled"
         );
-        console.log(scheduledAppointments);
+        // console.log(scheduledAppointments);
         setAppointments(scheduledAppointments);
       } catch (error) {
         console.error("Error fetching appointments:", error);
@@ -60,7 +60,7 @@ const JadwalKonsultasi = () => {
     <JadwalKonsultasiLayout>
       <div className="bg-white p-6 rounded-lg shadow-md">
         <div className="calendar-container">
-          <h1 className="text-xl font-bold text-gray-800 mb-4">Kalender</h1>
+          <h1 className="text-xl font-bold text-gray-800 mb-4">Kalender Konsultasi</h1>
           <Calendar
             onChange={handleDateChange} // Fungsi untuk menangani perubahan tanggal
             value={date} // Nilai tanggal yang dipilih
