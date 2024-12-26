@@ -33,7 +33,7 @@ const JadwalKonsultasi = () => {
         );
         // Filter appointment yang statusnya scheduled dan sesuai dengan user_id
         const scheduledAppointments = response.data.filter(
-          (appointment) => appointment.status === "scheduled"
+          (appointment) => appointment.status === "scheduled" || appointment.status === "processed"
         );
         // console.log(scheduledAppointments);
         setAppointments(scheduledAppointments);
