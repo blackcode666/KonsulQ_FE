@@ -1,12 +1,43 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import AdminLayout from "../../layouts/admin/AdminLayout";
 import ReportsLayout from "../../layouts/admin/ReportsLayout";
 
 const Reports = () => {
-  const reports = [
-    { doctor: "Dr A", patient: "John", earning: "Rp 2.000.000", status: "Selesai" },
-    { doctor: "Dr B", patient: "Jane", earning: "Rp 1.500.000", status: "Menunggu" },
-  ];
+  const [reports, setReports] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchReports = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await fetch("https://techsign.store/api/consultations", {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch reports");
+        }
+
+        const data = await response.json();
+        console.log(data);
+        setReports(data);
+      } catch (error) {
+        console.error("Error fetching reports:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReports();
+  }, []);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <AdminLayout>
