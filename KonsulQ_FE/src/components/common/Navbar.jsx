@@ -120,7 +120,7 @@ const Navbar = () => {
           {isLoggedIn ? (
             <div className="flex gap-4 items-center">
               <Link
-                to="/profil"
+                to="/dashboard-pasien"
                 className="bg-white text-teal-600 px-4 py-2 rounded-lg font-bold hover:bg-gray-200 transition"
               >
                 Profil
