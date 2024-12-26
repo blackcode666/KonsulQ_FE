@@ -20,7 +20,7 @@ const ManageConsultations = () => {
       });
 
       const data = response.data.map((appointment) => ({
-        waktu: appointment.appointment_time || "Tidak ada tanggal",
+        waktu: appointment.appointment_start || "Tidak ada tanggal",
         doctor: appointment.doctor?.name || "Tidak diketahui", // Mengakses nama dokter dari objek doctor
         patient: appointment.patient?.name || "Tidak diketahui", // Mengakses nama pasien dari objek patient
         detail: appointment.details || "Tidak ada detail",

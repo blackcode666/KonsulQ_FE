@@ -30,11 +30,11 @@ const DashboardAdmin = () => {
     patients: 0,
     consultations: 0,
     cancelled: 0,
-    
+
   });
   const [loading, setLoading] = useState(true);
 
-  
+
   useEffect(() => {
     const fetchData = async () => {
       const token = localStorage.getItem("token");
@@ -45,54 +45,54 @@ const DashboardAdmin = () => {
       }
 
       try {
-        
+
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
-        
+
         const userResponse = await axios.get("https://techsign.store/api/users");
-        
+
         const doctorCount = userResponse.data.data.filter(user => user.role === 'doctor').length;
         const patientCount = userResponse.data.data.filter(user => user.role === 'patient').length;
 
-        
+
         const consultationResponse = await axios.get("https://techsign.store/api/appointments");
         const consultationData = consultationResponse.data;
         const cancelledConsultations = consultationData.filter((consul) => consul.status === "canceled");
         const scheduledConsultations = consultationData.filter((consul) => consul.status !== "canceled");
         console.log("Scheduled Consultations:", scheduledConsultations.length);
 
-        
+
         setStats({
           doctors: doctorCount,
           patients: patientCount,
           consultations: scheduledConsultations.length,
           cancelled: cancelledConsultations.length,
         });
-        
-        const lastWeekDate = new Date();
-        lastWeekDate.setDate(lastWeekDate.getDate() - 7); 
 
-        
+        const lastWeekDate = new Date();
+        lastWeekDate.setDate(lastWeekDate.getDate() - 7);
+
+
         const recentConsultations = scheduledConsultations.filter((consultation) => {
-          const appointmentDate = new Date(consultation.appointment_time);
+          const appointmentDate = new Date(consultation.appointment_start);
           return appointmentDate >= lastWeekDate;
         });
 
-        
-        const consultationsByDay = [0, 0, 0, 0, 0, 0, 0]; 
+
+        const consultationsByDay = [0, 0, 0, 0, 0, 0, 0];
         recentConsultations.forEach((consultation) => {
-          const appointmentDate = new Date(consultation.appointment_time);
-          const dayOfWeek = appointmentDate.getDay(); 
+          const appointmentDate = new Date(consultation.appointment_start);
+          const dayOfWeek = appointmentDate.getDay();
           consultationsByDay[dayOfWeek]++;
         });
 
-        
+
         setLineData({
-          labels: ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"], 
+          labels: ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"],
           datasets: [
             {
               label: "Konsultasi Mingguan",
-              data: consultationsByDay, 
+              data: consultationsByDay,
               borderColor: "#34D399",
               backgroundColor: "rgba(52, 211, 153, 0.3)",
               tension: 0.4,
@@ -109,15 +109,15 @@ const DashboardAdmin = () => {
     };
 
     fetchData();
-  }, []); 
+  }, []);
 
-  
+
   const [lineData, setLineData] = useState({
     labels: ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"],
     datasets: [
       {
         label: "Konsultasi Mingguan",
-        data: [0, 0, 0, 0, 0, 0, 0], 
+        data: [0, 0, 0, 0, 0, 0, 0],
         borderColor: "#34D399",
         backgroundColor: "rgba(52, 211, 153, 0.3)",
         tension: 0.4,
@@ -126,7 +126,7 @@ const DashboardAdmin = () => {
     ],
   });
 
-  
+
   const pieData = {
     labels: ["Dokter Terdaftar", "Pasien Terdaftar", "Berlangsung", "Dibatalkan"],
     datasets: [
@@ -162,7 +162,6 @@ const DashboardAdmin = () => {
             {
               title: "Jumlah Dokter Terdaftar",
               value: stats.doctors,
-              growth: "+8% dari kemarin",
               bg: "bg-red-100",
               text: "text-red-500",
               icon: "fas fa-user-md",
@@ -170,7 +169,6 @@ const DashboardAdmin = () => {
             {
               title: "Total Pasien Terdaftar",
               value: stats.patients,
-              growth: "+5% dari kemarin",
               bg: "bg-yellow-100",
               text: "text-yellow-500",
               icon: "fas fa-users",
@@ -178,7 +176,6 @@ const DashboardAdmin = () => {
             {
               title: "Konsultasi Berlangsung",
               value: stats.consultations - stats.cancelled,
-              growth: "+1.2% dari kemarin",
               bg: "bg-green-100",
               text: "text-green-500",
               icon: "fas fa-comments",
@@ -186,7 +183,6 @@ const DashboardAdmin = () => {
             {
               title: "Konsultasi Dibatalkan",
               value: stats.cancelled,
-              growth: "+0.5% dari kemarin",
               bg: "bg-purple-100",
               text: "text-purple-500",
               icon: "fas fa-calendar-times",

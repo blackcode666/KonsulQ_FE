@@ -22,7 +22,7 @@ const ManageConsultationsLayout = ({ consultations }) => {
       >
         <thead>
           <tr className="border-b">
-            <th className="py-2 text-left">Tanggal</th>
+            <th className="py-2 text-left">Waktu mulai</th>
             <th className="py-2 text-left">Nama Dokter</th>
             <th className="py-2 text-left">Nama Pasien</th>
             <th className="py-2 text-left">Jenis Layanan</th>

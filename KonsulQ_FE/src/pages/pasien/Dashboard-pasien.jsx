@@ -172,9 +172,9 @@ const DashboardPasien = () => {
                 </div>
               </div>
               {/* appointment table */}
-                <div className="grid grid-cols-1 mt-6 w-100">
-                  <p className="text-gray-700 font-medium">Data Janji Temu</p>
-                  <table className="table-auto divide-y divide-gray-200 dark:divide-neutral-700">
+              <div className="grid grid-cols-1 mt-6 w-100">
+                <p className="text-gray-700 font-medium">Data Janji Temu</p>
+                <table className="table-auto divide-y divide-gray-200 dark:divide-neutral-700">
                   <thead>
                     <tr>
                       <th className="px-4 py-2">ID</th>
@@ -188,7 +188,7 @@ const DashboardPasien = () => {
                       patientData.appointments.map((appointment) => (
                         <tr key={appointment.id}>
                           <td className="px-4 py-2 border border-gray-300">{appointment.id}</td>
-                          <td className="px-4 py-2 border border-gray-300">{appointment.appointment_time}</td>
+                          <td className="px-4 py-2 border border-gray-300">{appointment.appointment_start}</td>
                           <td className="px-4 py-2 border border-gray-300">
                             {appointment.doctor ? appointment.doctor.name : "Tidak ada data dokter"}
                           </td>
