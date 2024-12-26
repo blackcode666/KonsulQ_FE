@@ -40,8 +40,9 @@ const CariDokter = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-        // Pastikan data tidak null atau undefined
-        const cleanedDoctors = response.data.filter(doctor => doctor.user && doctor.user.name);
+        console.log(response.data);
+        const cleanedDoctors = response.data.filter(doctor => doctor.user && doctor.user.id);
+        console.log(cleanedDoctors); // Pastikan data dokter sudah bersih dan lengkap
         setDoctors(cleanedDoctors); // Menyimpan data dokter ke state
       } catch (error) {
         console.error("Error fetching doctors:", error);
@@ -63,16 +64,17 @@ const CariDokter = () => {
       address.includes(searchTerm.toLowerCase())
     );
   });
-
   const handlePesanClick = (doctor) => {
+    console.log(doctor); // Cek apakah doctor.user.id ada
     setSelectedDoctor(doctor);
     setAppointmentDetails({
       ...appointmentDetails,
-      doctor_id: doctor.id, // Menambahkan doctor_id
-      patient_id: userInfo.id, // Menambahkan patient_id dari context
+      doctor_id: doctor.user ? doctor.user.id : null, // Cek ada tidaknya doctor.user.id
+      patient_id: userInfo.id,
     });
     setIsModalOpen(true);
   };
+
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
@@ -143,7 +145,8 @@ const CariDokter = () => {
       console.log("Appointment successfully created", response.data);
       handleCloseModal();
       alert("Pemesanan berhasil dibuat!");
-      
+      // Redirect ke halaman pembayaran
+      window.location.href = "/pembayaran";
     } catch (error) {
       console.error("Error creating appointment:", error);
     }
