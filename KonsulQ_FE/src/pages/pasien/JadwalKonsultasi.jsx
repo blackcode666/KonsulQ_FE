@@ -60,7 +60,7 @@ const JadwalKonsultasi = () => {
     <JadwalKonsultasiLayout>
       <div className="bg-white p-6 rounded-lg shadow-md">
         <div className="calendar-container">
-          <h2 className="text-center mb-4">Kalender</h2>
+          <h1 className="text-xl font-bold text-gray-800 mb-4">Kalender</h1>
           <Calendar
             onChange={handleDateChange} // Fungsi untuk menangani perubahan tanggal
             value={date} // Nilai tanggal yang dipilih
