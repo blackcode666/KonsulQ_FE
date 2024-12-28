@@ -12,7 +12,6 @@ const SidebarDokter = () => {
     { name: "Riwayat Pasien", icon: "fas fa-user-injured", path: "/riwayat-pasien" },
     { name: "Konsultasi Online", icon: "fas fa-comments", path: "/konsultasi-online" },
     { name: "Laporan", icon: "fas fa-chart-line", path: "/laporan" },
-    { name: "Messages", icon: "fas fa-envelope", path: "/messages-dokter" },
   ];
 
   return (

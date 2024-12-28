@@ -11,7 +11,6 @@ const SidebarPasien = () => {
     { name: "Jadwal Konsultasi", path: "/jadwal-konsultasi", icon: "fas fa-calendar-alt" },
     { name: "Riwayat Konsultasi", path: "/riwayat-konsultasi", icon: "fas fa-history" },
     { name: "Pembayaran", path: "/pembayaran", icon: "fas fa-dollar-sign" },
-    { name: "Messages", path: "/messages-pasien", icon: "fas fa-envelope" },
   ];
 
   const menuPasien = {
