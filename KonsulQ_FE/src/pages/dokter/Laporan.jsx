@@ -1,15 +1,45 @@
-import React from "react";
+import { React, useState, useEffect } from "react";
 import DokterLayout from "../../layouts/dokter/DokterLayout";
 import LaporanLayout from "../../layouts/dokter/LaporanLayout";
+import { useAuth } from "../../context/AuthContext";
 
 const Laporan = () => {
-  const reports = [
-    { date: "15 Juli 2024", earning: "Rp 2.000.000", status: "Selesai" },
-    { date: "22 Juli 2024", earning: "Rp 1.500.000", status: "Selesai" },
-    { date: "29 Juli 2024", earning: "Rp 3.000.000", status: "Menunggu" },
-    { date: "5 Agustus 2024", earning: "Rp 2.500.000", status: "Selesai" },
-  ];
+  const [reports, setReports] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { userInfo } = useAuth();
 
+  useEffect(() => {
+    const fetchReports = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await fetch(`https://techsign.store/api/consultations/${userInfo.id}/doctor`, {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch reports");
+        }
+
+        const data = await response.json();
+        console.log(data);
+        setReports(data);
+      } catch (error) {
+        console.error("Error fetching reports:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReports();
+  }, [userInfo]);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
   return (
     <DokterLayout>
       <LaporanLayout reports={reports} />

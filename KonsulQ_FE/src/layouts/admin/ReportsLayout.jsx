@@ -1,6 +1,4 @@
 import React from "react";
-import SidebarAdmin from "../../components/sidebar/SidebarAdmin"; // Pastikan jalur SidebarAdmin benar
-import Navbar from "../../components/navbar/Navbar"; // Pastikan jalur Navbar benar
 import DataTable from "datatables.net-react";
 import DT from "datatables.net-dt";
 import "./App.css";
