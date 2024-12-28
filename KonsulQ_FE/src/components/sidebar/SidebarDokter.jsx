@@ -17,11 +17,12 @@ const SidebarDokter = () => {
 
   return (
     <div className="w-64 h-screen bg-white shadow-lg fixed">
-      <div className="flex items-center justify-start px-4 py-6 border-b">
-        <img src={Logo} alt="Logo" className="w-12 h-12 mr-3" />
-        <h1 className="text-xl font-semibold text-gray-800">
+      {/* Logo */}
+      <div className="flex items-center justify-center py-6 border-b">
+        <img src={Logo} alt="Logo" className="w-12 h-12" />
+        <Link to="/" className="text-xl font-semibold text-gray-800 flex items-center">
           KONSUL <span className="text-teal-500">Q</span>
-        </h1>
+        </Link>
       </div>
 
       <ul className="mt-6">

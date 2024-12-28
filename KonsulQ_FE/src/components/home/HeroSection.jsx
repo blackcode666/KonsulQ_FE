@@ -1,25 +1,39 @@
-import React from 'react';
+import React from "react";
 import heroImage from "../../assets/dela.png"; // Pastikan path gambar sudah benar
 import { Link } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext"; // Import useAuth dari AuthContext
 
 const HeroSection = () => {
+  const { isLoggedIn } = useAuth(); // Ambil state isLoggedIn dari AuthContext
+
   return (
     <section className="flex flex-col md:flex-row items-center p-8 bg-gray-50">
       {/* Teks Bagian Kiri */}
       <div className="md:w-1/2 text-left md:text-left space-y-6">
         <h1 className="text-4xl font-extrabold text-gray-800">
-          Mudah Konsultasi, <span className="text-teal-500">Nyaman</span> Dari Rumah
+          Mudah Konsultasi, <span className="text-teal-500">Nyaman</span> Dari
+          Rumah
         </h1>
         <p className="mt-4 text-gray-600 leading-relaxed text-lg font-semibold">
-          KonsulQ adalah platform konsultasi kesehatan daring yang bertujuan memberikan akses mudah, cepat, dan terpercaya...
+          KonsulQ adalah platform konsultasi kesehatan daring yang bertujuan
+          memberikan akses mudah, cepat, dan terpercaya...
         </p>
         <div className="mt-6 flex gap-4 justify-center md:justify-start">
-          <Link
-            to="/formulir"
-            className="bg-teal-500 text-white px-6 py-2 rounded hover:bg-teal-600 transition font-bold"
-          >
-            Konsultasi Sekarang
-          </Link>
+          {isLoggedIn ? (
+            <Link
+              to="/formulir"
+              className="bg-teal-500 text-white px-6 py-2 rounded hover:bg-teal-600 transition font-bold"
+            >
+              Konsultasi Sekarang
+            </Link>
+          ) : (
+            <Link
+              to="/login"
+              className="bg-gray-500 text-white px-6 py-2 rounded hover:bg-gray-600 transition font-bold"
+            >
+              Login Dulu
+            </Link>
+          )}
         </div>
       </div>
 

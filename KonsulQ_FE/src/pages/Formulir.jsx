@@ -16,12 +16,21 @@ const Formulir = () => {
     phone: "",
     address: "",
     alergi: "",
-    dokterSpesialis: "",
   });
+
+  // State untuk menyimpan error
+  const [errors, setErrors] = useState({});
 
   // Fungsi untuk menangani perubahan input
   const handleChange = (e) => {
     const { id, value } = e.target;
+
+    // Hapus error jika field diisi
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [id]: value ? "" : "Field ini wajib diisi",
+    }));
+
     setFormData((prevData) => ({
       ...prevData,
       [id]: value,
@@ -31,9 +40,23 @@ const Formulir = () => {
   // Fungsi untuk submit formulir
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form Data:", formData); // Debug: Lihat data di console
 
-    // Navigasi ke halaman checkout dengan data
+    // Validasi: Periksa apakah semua field terisi
+    const newErrors = {};
+    Object.keys(formData).forEach((key) => {
+      if (!formData[key]) {
+        newErrors[key] = "Field ini wajib diisi";
+      }
+    });
+
+    // Jika ada error, simpan ke state dan hentikan proses
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      alert("Harap isi semua bidang yang diperlukan.");
+      return;
+    }
+
+    // Jika validasi lolos, navigasi ke halaman checkout
     navigate("/checkout", { state: { formData } });
   };
 
@@ -45,48 +68,44 @@ const Formulir = () => {
       {/* Form Section */}
       <div className="container mx-auto p-6">
         <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Formulir Konsultasi</h2>
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">
+            Formulir Konsultasi
+          </h2>
           <form onSubmit={handleSubmit}>
             {/* Input: Dokter */}
             <div className="mb-4">
-              <label htmlFor="dokter" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="dokter"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Mau konsultasi dengan dokter apa? *
               </label>
-              <div className="relative">
-                <select
-                  id="dokter"
-                  value={formData.dokter}
-                  onChange={handleChange}
-                  className="w-full border rounded-lg p-3 appearance-none focus:ring-teal-500 focus:border-teal-500 text-gray-800"
-                >
-                  <option value="" disabled hidden>
-                    Pilih Dokter
-                  </option>
-                  <option value="Dokter Umum">Dokter Umum</option>
-                  <option value="Dokter Spesialis">Dokter Spesialis</option>
-                </select>
-                <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-                  <svg
-                    className="w-5 h-5 text-gray-400"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    aria-hidden="true"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M5.293 9.293a1 1 0 011.414 0L10 12.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-              </div>
+              <select
+                id="dokter"
+                value={formData.dokter}
+                onChange={handleChange}
+                className={`w-full border rounded-lg p-3 focus:ring-teal-500 focus:border-teal-500 ${
+                  errors.dokter ? "border-red-500" : ""
+                }`}
+              >
+                <option value="" disabled hidden>
+                  Pilih Dokter
+                </option>
+                <option value="Dokter Umum">Dokter Umum</option>
+                <option value="Dokter Spesialis">Dokter Spesialis</option>
+              </select>
+              {errors.dokter && (
+                <p className="text-red-500 text-sm mt-1">{errors.dokter}</p>
+              )}
             </div>
 
             {/* Input: Nama dan Tanggal Lahir */}
             <div className="mb-4 grid sm:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="nama" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="nama"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   Nama Pasien *
                 </label>
                 <input
@@ -95,11 +114,19 @@ const Formulir = () => {
                   value={formData.nama}
                   onChange={handleChange}
                   placeholder="Masukkan Nama Lengkap"
-                  className="w-full border rounded-lg p-3 focus:ring-teal-500 focus:border-teal-500"
+                  className={`w-full border rounded-lg p-3 focus:ring-teal-500 focus:border-teal-500 ${
+                    errors.nama ? "border-red-500" : ""
+                  }`}
                 />
+                {errors.nama && (
+                  <p className="text-red-500 text-sm mt-1">{errors.nama}</p>
+                )}
               </div>
               <div>
-                <label htmlFor="tanggal" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="tanggal"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   Tanggal Lahir Pasien *
                 </label>
                 <input
@@ -107,14 +134,22 @@ const Formulir = () => {
                   id="tanggal"
                   value={formData.tanggal}
                   onChange={handleChange}
-                  className="w-full border rounded-lg p-3 focus:ring-teal-500 focus:border-teal-500"
+                  className={`w-full border rounded-lg p-3 focus:ring-teal-500 focus:border-teal-500 ${
+                    errors.tanggal ? "border-red-500" : ""
+                  }`}
                 />
+                {errors.tanggal && (
+                  <p className="text-red-500 text-sm mt-1">{errors.tanggal}</p>
+                )}
               </div>
             </div>
 
             {/* Input: Gender */}
             <div className="mb-4">
-              <label htmlFor="gender" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="gender"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Gender Pasien *
               </label>
               <div className="flex gap-4">
@@ -143,12 +178,18 @@ const Formulir = () => {
                   Perempuan
                 </label>
               </div>
+              {errors.gender && (
+                <p className="text-red-500 text-sm mt-1">{errors.gender}</p>
+              )}
             </div>
 
             {/* Input: Email dan Phone */}
             <div className="mb-4 grid sm:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   Email *
                 </label>
                 <input
@@ -157,11 +198,19 @@ const Formulir = () => {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="Masukkan Email"
-                  className="w-full border rounded-lg p-3 focus:ring-teal-500 focus:border-teal-500"
+                  className={`w-full border rounded-lg p-3 focus:ring-teal-500 focus:border-teal-500 ${
+                    errors.email ? "border-red-500" : ""
+                  }`}
                 />
+                {errors.email && (
+                  <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+                )}
               </div>
               <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="phone"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   Nomor Handphone *
                 </label>
                 <input
@@ -170,14 +219,22 @@ const Formulir = () => {
                   value={formData.phone}
                   onChange={handleChange}
                   placeholder="Masukkan Nomor Handphone"
-                  className="w-full border rounded-lg p-3 focus:ring-teal-500 focus:border-teal-500"
+                  className={`w-full border rounded-lg p-3 focus:ring-teal-500 focus:border-teal-500 ${
+                    errors.phone ? "border-red-500" : ""
+                  }`}
                 />
+                {errors.phone && (
+                  <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
+                )}
               </div>
             </div>
 
             {/* Input: Alamat */}
             <div className="mb-4">
-              <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="address"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Alamat Pasien *
               </label>
               <textarea
@@ -185,26 +242,36 @@ const Formulir = () => {
                 value={formData.address}
                 onChange={handleChange}
                 placeholder="Masukkan Alamat Pasien"
-                className="w-full border rounded-lg p-3 focus:ring-teal-500 focus:border-teal-500"
+                className={`w-full border rounded-lg p-3 focus:ring-teal-500 focus:border-teal-500 ${
+                  errors.address ? "border-red-500" : ""
+                }`}
               ></textarea>
+              {errors.address && (
+                <p className="text-red-500 text-sm mt-1">{errors.address}</p>
+              )}
             </div>
 
-            {/* Input: Alergi dan Dokter Spesialis */}
-            <div className="mb-4 grid sm:grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="alergi" className="block text-sm font-medium text-gray-700 mb-2">
-                  Riwayat Alergi Obat *
-                </label>
-                <input
-                  type="text"
-                  id="alergi"
-                  value={formData.alergi}
-                  onChange={handleChange}
-                  placeholder="Masukkan Riwayat Alergi Obat (Jika Ada)"
-                  className="w-full border rounded-lg p-3 focus:ring-teal-500 focus:border-teal-500"
-                />
-              </div>
-             
+            {/* Input: Alergi */}
+            <div className="mb-4">
+              <label
+                htmlFor="alergi"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
+                Riwayat Alergi Obat *
+              </label>
+              <input
+                type="text"
+                id="alergi"
+                value={formData.alergi}
+                onChange={handleChange}
+                placeholder="Masukkan Riwayat Alergi Obat (Jika Ada)"
+                className={`w-full border rounded-lg p-3 focus:ring-teal-500 focus:border-teal-500 ${
+                  errors.alergi ? "border-red-500" : ""
+                }`}
+              />
+              {errors.alergi && (
+                <p className="text-red-500 text-sm mt-1">{errors.alergi}</p>
+              )}
             </div>
 
             {/* Submit Button */}
