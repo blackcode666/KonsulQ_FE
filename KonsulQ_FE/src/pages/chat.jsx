@@ -108,6 +108,7 @@ const ChatKonsul = () => {
     if (error) {
         return <div className="text-red-500 text-center mt-10">{error}</div>;
     }
+    const isExpired = new Date(messages[messages.length - 1]?.consultation.appointment.appointment_end) < new Date();
 
     return (
         <div className="flex h-screen">
@@ -118,13 +119,18 @@ const ChatKonsul = () => {
                     <div className="p-4 bg-white shadow rounded-md">
                         <h2 className="text-lg font-semibold">Chat Konsultasi</h2>
                         <p className="text-sm text-gray-500">Dokter dan Pasien</p>
-                    </div><div
+                    </div>
+
+                    <div
                         className="mt-4 flex-grow overflow-y-auto bg-white p-4 shadow rounded-md"
                         style={{ height: "calc(80vh - 200px)" }}
                         ref={chatContainerRef}
                     >
                         {Array.isArray(messages) && messages.length > 0 ? (
                             messages.map((message) => {
+                                // Menambahkan pengecekan waktu konsultasi
+                                // const isExpired = new Date(message.consultation.appointment.appointment_end) < new Date();
+
                                 return (
                                     <div
                                         key={message.id}
@@ -161,16 +167,26 @@ const ChatKonsul = () => {
                     </div>
 
                     <div className="mt-4 flex items-center bg-white p-4 shadow rounded-md">
-                        <input
-                            type="text"
-                            className="flex-grow border rounded-l-md px-4 py-2 focus:outline-none focus:ring focus:ring-blue-300"
-                            placeholder="Tulis pesan..."
-                            value={newMessage}
-                            onChange={(e) => setNewMessage(e.target.value)}
-                        />
+                        {isExpired ? (
+                            <input
+                                type="text"
+                                className="flex-grow border rounded-l-md px-4 py-2 focus:outline-none focus:ring focus:ring-blue-300"
+                                placeholder="Konsultasi telah selesai"
+                                disabled
+                            />
+                        ) : (
+                            <input
+                                type="text"
+                                className="flex-grow border rounded-l-md px-4 py-2 focus:outline-none focus:ring focus:ring-blue-300"
+                                placeholder="Tulis pesan..."
+                                value={newMessage}
+                                onChange={(e) => setNewMessage(e.target.value)}
+                            />
+                        )}
                         <button
                             onClick={handleSend}
                             className="bg-blue-500 text-white px-4 py-2 rounded-r-md hover:bg-blue-600"
+                            disabled={isExpired} // Nonaktifkan tombol kirim jika waktu sudah habis
                         >
                             Kirim
                         </button>
@@ -179,6 +195,7 @@ const ChatKonsul = () => {
             </div>
         </div>
     );
+
 };
 
 export default ChatKonsul;
