@@ -203,14 +203,23 @@ const CariDokter = () => {
             <p>Loading...</p>
           ) : filteredDoctors.length > 0 ? (
             filteredDoctors.map((doctor, index) => (
-              <div key={index} className="bg-white p-4 border rounded-lg shadow-sm">
-                <img
-                  src={doctor.user.profile_pictures || "/default-profile.png"}
-                  alt={doctor.user.name || "Dokter"}
-                  className="w-full h-48 object-cover rounded-lg mb-4"
-                />
+              <div key={index} className="bg-white p-4 border rounded-lg shadow-sm"><img
+                src={
+                  doctor.user.profile_pictures
+                    ? doctor.user.profile_pictures //
+                    : doctor.user.gender === 0
+                      ? '/0.png' 
+                      : doctor.user.gender === 1
+                        ? '/1.png' 
+                        : "https://ui-avatars.com/api/?name=" + doctor.user.name + "&background=0D8ABC&color=fff"
+                }
+                alt={doctor.user.name || "Dokter"}
+                className="w-full h-48  rounded-lg mb-4"
+              />
+
                 <h2 className="text-lg font-semibold text-teal-600">{doctor.user.name || "Nama tidak tersedia"}</h2>
                 <p className="text-gray-600">Spesialis: {doctor.specialization || "Tidak tersedia"}</p>
+                <p className="text-gray-600">Jenis Kelamin: {doctor.user.gender === 0 ? "wanita" : "pria"}</p>
                 <p className="text-gray-500">Lokasi: {doctor.user.address || "Alamat tidak tersedia"}</p>
                 <p className="text-gray-500">
                   Harga<small>/jam</small>:{" "}

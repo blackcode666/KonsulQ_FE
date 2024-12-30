@@ -216,7 +216,7 @@ const Navbar = () => {
             )}
             <li>
               <Link
-                to="/messages"
+                to="/riwayat-konsultasi"
                 className="block px-4 py-2 text-gray-700 hover:bg-teal-100"
               >
                 Pesan
@@ -224,7 +224,7 @@ const Navbar = () => {
             </li>
             <li>
               <Link
-                to="/profil"
+                to="/dashboard-pasien"
                 className="block px-4 py-2 text-gray-700 hover:bg-teal-100"
               >
                 Profil
