@@ -5,9 +5,10 @@ const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userInfo, setUserInfo] = useState(null); 
+  const [isLoggedIn, setIsLoggedIn] = useState(false); // Mengatur status login
+  const [userInfo, setUserInfo] = useState(null); // Menyimpan informasi user
 
+  // Mengecek token dan userInfo di localStorage saat aplikasi pertama kali di-load
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     const user = JSON.parse(localStorage.getItem("userInfo"));
@@ -18,20 +19,20 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  
+  // Fungsi untuk login
   const login = (user, token) => {
-    setIsLoggedIn(true);
-    setUserInfo(user); 
-    localStorage.setItem("authToken", token); 
-    localStorage.setItem("userInfo", JSON.stringify(user)); 
+    setIsLoggedIn(true); // Set isLoggedIn ke true
+    setUserInfo(user); // Simpan informasi user
+    localStorage.setItem("authToken", token); // Simpan token ke localStorage
+    localStorage.setItem("userInfo", JSON.stringify(user)); // Simpan informasi user ke localStorage
   };
 
-  
+  // Fungsi untuk logout
   const logout = () => {
-    setIsLoggedIn(false);
-    setUserInfo(null); 
-    localStorage.removeItem("authToken"); 
-    localStorage.removeItem("userInfo"); 
+    setIsLoggedIn(false); // Set isLoggedIn ke false
+    setUserInfo(null); // Hapus informasi user dari state
+    localStorage.removeItem("authToken"); // Hapus token dari localStorage
+    localStorage.removeItem("userInfo"); // Hapus informasi user dari localStorage
   };
 
   return (

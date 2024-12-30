@@ -21,13 +21,14 @@ const SidebarPasien = () => {
 
   return (
     <div className="w-64 h-screen bg-white shadow-lg fixed">
-      {/* Logo */}
-      <div className="flex items-center justify-center py-6 border-b">
-        <img src={Logo} alt="Logo" className="w-12 h-12" />
-        <h1 className="text-xl font-semibold text-gray-800">
-          KONSUL <span className="text-teal-500">Q</span>
-        </h1>
-      </div>
+  {/* Logo */}
+  <div className="flex items-center justify-center py-6 border-b">
+    <img src={Logo} alt="Logo" className="w-12 h-12" />
+    <Link to="/" className="text-xl font-semibold text-gray-800 flex items-center">
+      KONSUL <span className="text-teal-500">Q</span>
+    </Link>
+  </div>
+
 
       {/* Menu Pasien */}
       <div className="px-4 py-2 border-b">

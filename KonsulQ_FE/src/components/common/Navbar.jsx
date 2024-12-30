@@ -1,22 +1,47 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
 import { useAuth } from "../../context/AuthContext"; // Import useAuth dari AuthContext
 
 const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileView, setIsMobileView] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const dropdownRef = useRef(null);
 
-  const { isLoggedIn, setIsLoggedIn } = useAuth(); // Ambil isLoggedIn dan setIsLoggedIn dari AuthContext
+  const { isLoggedIn, userInfo, logout } = useAuth(); // Ambil state dan fungsi logout dari AuthContext
 
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
 
-  const { logout } = useAuth();
+  const handleLogout = async () => {
+    try {
+      // Panggil API logout ke backend
+      await axios.post(
+        "https://techsign.store/api/logout", // Sesuaikan dengan endpoint backend Anda
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`, // Ambil token dari localStorage
+          },
+        }
+      );
 
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
+      console.log("Logout berhasil dari backend.");
+    } catch (error) {
+      console.error("Error saat logout dari backend:", error);
+    } finally {
+      // Hapus semua data dari localStorage
+      localStorage.removeItem("token");
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("userInfo");
+
+      // Panggil fungsi logout dari AuthContext
+      logout();
+
+      // Redirect ke halaman login
+      navigate("/");
+    }
   };
 
   useEffect(() => {
@@ -70,14 +95,9 @@ const Navbar = () => {
           </button>
 
           <div className="flex items-center gap-2">
-            <img
-              src="src/assets/LOGO.png"
-              alt="Konsul Q"
-              className="w-12 h-auto border border-gray-300 shadow-md rounded-md"
-            />
-            <span className="text-white text-2xl tracking-wide font-semibold font-mono">
-              KONSUL<span className="font-bold inline-block">Q</span>
-            </span>
+            <Link to="/" className="text-white text-2xl font-bold">
+              KONSUL<span className="text-teal-200">Q</span>
+            </Link>
           </div>
         </div>
 
@@ -86,29 +106,37 @@ const Navbar = () => {
           <nav className="hidden md:flex gap-6">
             <Link
               to="/"
-              className={`font-bold inline-block text-white hover:underline ${location.pathname === "/" ? "border-b-2 border-white" : ""
-                }`}
+              className={`font-bold inline-block text-white hover:underline ${
+                location.pathname === "/" ? "border-b-2 border-white" : ""
+              }`}
             >
               BERANDA
             </Link>
             <Link
               to="/riwayat"
-              className={`font-bold inline-block text-white hover:underline ${location.pathname === "/riwayat" ? "border-b-2 border-white" : ""
-                }`}
+              className={`font-bold inline-block text-white hover:underline ${
+                location.pathname === "/riwayat"
+                  ? "border-b-2 border-white"
+                  : ""
+              }`}
             >
               RIWAYAT
             </Link>
             <Link
               to="/artikel"
-              className={`font-bold inline-block text-white hover:underline ${location.pathname === "/artikel" ? "border-b-2 border-white" : ""
-                }`}
+              className={`font-bold inline-block text-white hover:underline ${
+                location.pathname === "/artikel"
+                  ? "border-b-2 border-white"
+                  : ""
+              }`}
             >
               ARTIKEL
             </Link>
             <Link
               to="/about"
-              className={`font-bold inline-block text-white hover:underline ${location.pathname === "/about" ? "border-b-2 border-white" : ""
-                }`}
+              className={`font-bold inline-block text-white hover:underline ${
+                location.pathname === "/about" ? "border-b-2 border-white" : ""
+              }`}
             >
               TENTANG
             </Link>
@@ -123,7 +151,7 @@ const Navbar = () => {
                 to="/dashboard-pasien"
                 className="bg-white text-teal-600 px-4 py-2 rounded-lg font-bold hover:bg-gray-200 transition"
               >
-                Profil
+                {userInfo?.name || "Profil"}
               </Link>
               <button
                 onClick={handleLogout}
@@ -218,4 +246,3 @@ const Navbar = () => {
 };
 
 export default Navbar;
-
