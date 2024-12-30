@@ -1,17 +1,42 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import AdminLayout from "../../layouts/admin/AdminLayout";
 import ManageUsersLayout from "../../layouts/admin/ManageUsersLayout";
 
 const ManageUsers = () => {
-  const users = [
-    { name: "Ola Akintola", date: "12-09-2023", room: "UI/201", id: "02566", service: "Konsultasi Chat" },
-    { name: "Janet Paul", date: "12-09-2023", room: "AC/32", id: "07634", service: "Konsultasi Video Call" },
-    { name: "Areogun Joe", date: "12-09-2023", room: "AG/45", id: "02990", service: "Konsultasi Chat" },
-  ];
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const token = localStorage.getItem("token"); // Ambil token dari localStorage
+        const response = await axios.get("https://techsign.store/api/users", {
+          headers: {
+            Authorization: `Bearer ${token}`, // Menambahkan Authorization header
+          },
+        });
+
+        // Filter pengguna berdasarkan role 'pasien'
+        const pasienUsers = response.data.data.filter(user => user.role === 'patient');
+
+        // Set data pengguna yang sudah difilter
+        setUsers(pasienUsers);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+        setError("Failed to load users");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, []);
 
   return (
     <AdminLayout>
-      <ManageUsersLayout users={users} />
+      <ManageUsersLayout users={users} loading={loading} error={error} />
     </AdminLayout>
   );
 };

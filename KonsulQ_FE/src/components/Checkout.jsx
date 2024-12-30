@@ -8,16 +8,19 @@ const Checkout = () => {
   const handlePayment = async () => {
     try {
       // Panggil API Laravel untuk mendapatkan Snap Token
-      const response = await fetch("http://localhost:8000/api/create-transaction", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          grossAmount: grossAmount,
-          name: "Nama Pelanggan",
-          email: "email@contoh.com",
-          phone: "081234567890",
-        }),
-      });
+      const response = await fetch(
+        "https://techsign.store/api/create-transaction",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            grossAmount: grossAmount,
+            name: "Nama Pelanggan",
+            email: "email@contoh.com",
+            phone: "081234567890",
+          }),
+        }
+      );
 
       const data = await response.json();
 
@@ -28,6 +31,10 @@ const Checkout = () => {
         window.snap.pay(data.snapToken, {
           onSuccess: (result) => {
             console.log("Payment Success:", result);
+
+            // Arahkan ke WhatsApp dengan pesan otomatis
+            const waUrl = `https://wa.me/6281317407414?text=Halo%20admin,%20saya%20sudah%20melakukan%20pembayaran%20dengan%20Order%20ID:%20${result.order_id}`;
+            window.location.href = waUrl;
           },
           onPending: (result) => {
             console.log("Payment Pending:", result);

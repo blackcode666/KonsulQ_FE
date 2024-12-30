@@ -43,6 +43,7 @@ import JadwalKonsultasi from "../pages/pasien/JadwalKonsultasi";
 import RiwayatKonsultasi from "../pages/pasien/RiwayatKonsultasi";
 import Pembayaran from "../pages/pasien/Pembayaran";
 import MessagesPasien from "../pages/pasien/MessagePasien";
+import ChatKonsul from "../pages/chat";
 
 
 
@@ -65,27 +66,30 @@ const Routing = () => {
 
 
       {/* Admin Routes */}
-      <Route path="/dashboard-admin" element={<Middleware><DashboardAdmin /></Middleware>} />
-      <Route path="/manage-users" element={<Middleware><ManageUsers /></Middleware>} />
-      <Route path="/manage-doctors" element={<Middleware><ManageDoctors /></Middleware>} />
-      <Route path="/manage-consultations" element={<Middleware><ManageConsultations /></Middleware>} />
-      <Route path="/reports" element={<Middleware><Reports /></Middleware>} />
+      <Route path="/dashboard-admin" element={<Middleware allowedRoles={['admin']}><DashboardAdmin /></Middleware>} />
+      <Route path="/manage-pasien" element={<Middleware allowedRoles={['admin']}><ManageUsers /></Middleware>} />
+      <Route path="/manage-doctors" element={<Middleware allowedRoles={['admin']}><ManageDoctors /></Middleware>} />
+      <Route path="/manage-consultations" element={<Middleware allowedRoles={['admin']}><ManageConsultations /></Middleware>} />
+      <Route path="/reports" element={<Middleware allowedRoles={['admin']}><Reports /></Middleware>} />
 
       {/* Dokter Routes */}
-      <Route path="/dashboard-dokter" element={<Middleware><DashboardDokter /></Middleware>} />
-      <Route path="/jadwal-saya" element={<Middleware><JadwalSaya /></Middleware>} />
-      <Route path="/riwayat-pasien" element={<Middleware><RiwayatPasien /></Middleware>} />
-      <Route path="/konsultasi-online" element={<Middleware><KonsultasiOnline /></Middleware>} />
-      <Route path="/laporan" element={<Middleware><Laporan /></Middleware>} />
-      <Route path="/messages-dokter" element={<Middleware><MessagesDokter /></Middleware>} />
+      <Route path="/dashboard-dokter" element={<Middleware allowedRoles={['doctor']}><DashboardDokter /></Middleware>} />
+      <Route path="/jadwal-saya" element={<Middleware allowedRoles={['doctor']}><JadwalSaya /></Middleware>} />
+      <Route path="/riwayat-pasien" element={<Middleware allowedRoles={['doctor']}><RiwayatPasien /></Middleware>} />
+      <Route path="/konsultasi-online" element={<Middleware allowedRoles={['doctor']}><KonsultasiOnline /></Middleware>} />
+      <Route path="/laporan" element={<Middleware allowedRoles={['doctor']}><Laporan /></Middleware>} />
+      <Route path="/messages-dokter" element={<Middleware allowedRoles={['doctor']}><MessagesDokter /></Middleware>} />
+
+      <Route path="/konsultasi/:id" element={<Middleware allowedRoles={['doctor', 'patient']}><ChatKonsul /></Middleware>} />
+
 
       {/* Pasien Routes */}
-      <Route path="/dashboard-pasien" element={<Middleware><DashboardPasien /></Middleware>} />
-      <Route path="/cari-dokter" element={<Middleware><CariDokter /></Middleware>} />
-      <Route path="/jadwal-konsultasi" element={<Middleware><JadwalKonsultasi /></Middleware>} />
-      <Route path="/riwayat-konsultasi" element={<Middleware><RiwayatKonsultasi /></Middleware>} />
-      <Route path="/pembayaran" element={<Middleware><Pembayaran /></Middleware>} />
-      <Route path="/messages-pasien" element={<Middleware><MessagesPasien /></Middleware>} />
+      <Route path="/dashboard-pasien" element={<Middleware allowedRoles={['patient']}><DashboardPasien /></Middleware>} />
+      <Route path="/cari-dokter" element={<Middleware allowedRoles={['patient']}><CariDokter /></Middleware>} />
+      <Route path="/jadwal-konsultasi" element={<Middleware allowedRoles={['patient']}><JadwalKonsultasi /></Middleware>} />
+      <Route path="/riwayat-konsultasi" element={<Middleware allowedRoles={['patient']}><RiwayatKonsultasi /></Middleware>} />
+      <Route path="/pembayaran" element={<Middleware allowedRoles={['patient']}><Pembayaran /></Middleware>} />
+      <Route path="/messages-pasien" element={<Middleware allowedRoles={['patient']}><MessagesPasien /></Middleware>} />
     </Routes>
   );
 };

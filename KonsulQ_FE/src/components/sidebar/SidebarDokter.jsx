@@ -1,6 +1,7 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import Logo from "../../assets/LOGO.png";
+import Logout from "./Logout"; 
 
 const SidebarDokter = () => {
   const location = useLocation();
@@ -11,16 +12,16 @@ const SidebarDokter = () => {
     { name: "Riwayat Pasien", icon: "fas fa-user-injured", path: "/riwayat-pasien" },
     { name: "Konsultasi Online", icon: "fas fa-comments", path: "/konsultasi-online" },
     { name: "Laporan", icon: "fas fa-chart-line", path: "/laporan" },
-    { name: "Messages", icon: "fas fa-envelope", path: "/messages-dokter" },
   ];
 
   return (
     <div className="w-64 h-screen bg-white shadow-lg fixed">
-      <div className="flex items-center justify-start px-4 py-6 border-b">
-        <img src={Logo} alt="Logo" className="w-12 h-12 mr-3" />
-        <h1 className="text-xl font-semibold text-gray-800">
+      {/* Logo */}
+      <div className="flex items-center justify-center py-6 border-b">
+        <img src={Logo} alt="Logo" className="w-12 h-12" />
+        <Link to="/" className="text-xl font-semibold text-gray-800 flex items-center">
           KONSUL <span className="text-teal-500">Q</span>
-        </h1>
+        </Link>
       </div>
 
       <ul className="mt-6">
@@ -45,10 +46,9 @@ const SidebarDokter = () => {
         ))}
       </ul>
 
+      {/* Sign Out Button */}
       <div className="absolute bottom-6 w-full">
-        <button className="w-full flex items-center px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 transition">
-          <i className="fas fa-sign-out-alt mr-3 text-lg"></i> Sign Out
-        </button>
+        <Logout /> {/* Menggunakan komponen Logout */}
       </div>
     </div>
   );

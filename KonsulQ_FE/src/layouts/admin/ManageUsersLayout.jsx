@@ -1,33 +1,59 @@
-import React from "react";
-import SidebarAdmin from "../../components/sidebar/SidebarAdmin"; // Pastikan jalur SidebarAdmin benar
-import NavbarAdmin from "../../components/navbar/NavbarAdmin"; // Pastikan jalur NavbarAdmin benar
+import React, { useEffect, useState } from "react";
+import DataTable from "datatables.net-react";
+import DT from "datatables.net-dt";
 
-const ManageUsersLayout = ({ users }) => {
+import './App.css';
+// Menggunakan DataTables
+DataTable.use(DT);
+
+const ManageUsersLayout = ({ users, loading, error }) => {
+  const [tableData, setTableData] = useState([]);
+
+  // Update data ketika props users berubah
+  useEffect(() => {
+    if (users && users.length > 0) {
+      const formattedData = users.map((user, index) => [
+        index + 1,
+        user.name,
+        user.gender === 0 ? "Wanita" : "Pria",
+        user.email,
+        user.phone_number,
+        user.address,
+        user.medical_history,
+      ]);
+      setTableData(formattedData);
+    }
+  }, [users]);
   return (
     <div className="p-6 bg-white rounded-lg shadow-md">
-      <h1 className="text-2xl font-bold mb-4">Manajemen Pengguna</h1>
-      <table className="w-full border-collapse">
-        <thead>
-          <tr className="border-b">
-            <th className="py-2 text-left">Nama</th>
-            <th className="py-2 text-left">Tanggal</th>
-            <th className="py-2 text-left">Room Number</th>
-            <th className="py-2 text-left">Patient ID</th>
-            <th className="py-2 text-left">Jenis Layanan</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user, index) => (
-            <tr key={index} className="border-b hover:bg-gray-100">
-              <td className="py-2">{user.name}</td>
-              <td className="py-2">{user.date}</td>
-              <td className="py-2">{user.room}</td>
-              <td className="py-2">{user.id}</td>
-              <td className="py-2">{user.service}</td>
+      <h1 className="text-2xl font-bold mb-4">Manajemen Pasien</h1>
+      <div className="w-full">
+        <DataTable
+          data={tableData}
+          className="display"
+          options={{
+            paging: true,
+            searching: true,
+            ordering: true,
+            info: true,
+          }}
+        >
+          <thead>
+            <tr className="border">
+              <th className="py-2 text-left">No</th>
+              <th className="py-2 text-left">Nama</th>
+              <th className="py-2 text-left">Jenis kelamin</th>
+              <th className="py-2 text-left">Email</th>
+              <th className="py-2 text-left">Telepon</th>
+              <th className="py-2 text-left">Alamat</th>
+              <th className="py-2 text-left">Riwayat Penyakit</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {/* Data akan diambil dari state tableData */}
+          </tbody>
+        </DataTable>
+      </div>
     </div>
   );
 };
