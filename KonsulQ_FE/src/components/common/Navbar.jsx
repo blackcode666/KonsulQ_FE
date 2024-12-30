@@ -115,7 +115,7 @@ const Navbar = () => {
             <Link
               to="/riwayat"
               className={`font-bold inline-block text-white hover:underline ${
-                location.pathname === "/riwayat"
+                location.pathname === "/riwayat-konsultasi"
                   ? "border-b-2 border-white"
                   : ""
               }`}
