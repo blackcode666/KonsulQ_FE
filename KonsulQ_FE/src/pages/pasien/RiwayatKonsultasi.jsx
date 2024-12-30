@@ -109,9 +109,9 @@ const RiwayatKonsultasi = () => {
                       ) : appointment.status === "completed" ? (
                         <a
                           className="bg-success-500 text-white py-1 px-1 rounded hover:bg-success-600 transition duration-200"
-                          href="#"
+                              href={`/konsultasi/${appointment.id}`}
                         >
-                          selesai
+                          lihat
                         </a>
                       ) : appointment.status === "pending" ? (
                         <a
