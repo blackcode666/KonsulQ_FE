@@ -9,7 +9,7 @@ const Checkout = () => {
     try {
       // Panggil API Laravel untuk mendapatkan Snap Token
       const response = await fetch(
-        "http://localhost:8000/api/create-transaction",
+        "https://techsign.store/api/create-transaction",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

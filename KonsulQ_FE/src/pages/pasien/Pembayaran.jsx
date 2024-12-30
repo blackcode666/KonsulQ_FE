@@ -9,48 +9,110 @@ DataTable.use(DT);
 import PembayaranLayout from "../../layouts/pasien/PembayaranLayout";
 
 const Pembayaran = () => {
-  const [consultations, setConsultations] = useState([]); // State untuk menyimpan konsultasi
-  const [loading, setLoading] = useState(true); // State untuk menandai loading
-  const { userInfo } = useAuth(); // Ambil data pengguna dari context
+  const [consultations, setConsultations] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { userInfo } = useAuth();
   const token = localStorage.getItem("token");
-  const navigate = useNavigate(); // Untuk navigasi
+  const navigate = useNavigate();
+
+  let isPaymentInProgress = false; // Flag untuk mencegah pemanggilan ganda
 
   useEffect(() => {
-    const fetchConsultations = async () => {
-      try {
-        setLoading(true);
-        const response = await axios.get(
-          `https://techsign.store/api/consultations?patient_id=${userInfo.id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setConsultations(response.data); // Simpan data konsultasi
-      } catch (error) {
-        console.error("Error fetching consultations:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchConsultations();
   }, [token, userInfo.id]);
 
-  const handlePayment = (consultation) => {
-    // Simpan data konsultasi ke localStorage atau state management
+  const fetchConsultations = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        `https://techsign.store/api/consultations?patient_id=${userInfo.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setConsultations(response.data);
+    } catch (error) {
+      console.error("Error fetching consultations:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handlePayment = async (consultation) => {
+    if (isPaymentInProgress) {
+      alert("Transaksi sedang diproses, harap tunggu.");
+      return;
+    }
+
+    isPaymentInProgress = true;
+
     localStorage.setItem(
       "checkoutData",
       JSON.stringify({
         id: consultation.id,
-        amount: consultation.amount || 50000,
+        amount: consultation.total_price || 50000,
         description: `Pembayaran untuk konsultasi dengan ${consultation.appointment.doctor.name}`,
       })
     );
 
-    // Navigasi ke halaman checkout
-    navigate(`/checkout`);
+    try {
+      const response = await axios.post("https://techsign.store/api/create-transaction", {
+        grossAmount: consultation.total_price || 50000,
+        name: userInfo.name,
+        email: userInfo.email,
+        phone: userInfo.phone,
+      });
+
+      window.snap.pay(response.data.snapToken, {
+        onSuccess: async function (result) {
+          console.log("Payment Success:", result);
+          try {
+            await axios.post("https://techsign.store/api/update-payment-status", {
+              order_id: result.order_id,
+              status: "success",
+            });
+            alert("Pembayaran berhasil!");
+            fetchConsultations();
+          } catch (error) {
+            console.error("Error updating payment status:", error);
+          }
+        },
+        onPending: async function (result) {
+          console.log("Payment Pending:", result);
+          try {
+            await axios.post("https://techsign.store/api/update-payment-status", {
+              order_id: result.order_id,
+              status: "pending",
+            });
+            alert("Pembayaran masih dalam proses.");
+            fetchConsultations();
+          } catch (error) {
+            console.error("Error updating payment status:", error);
+          }
+        },
+        onError: async function (result) {
+          console.log("Payment Error:", result);
+          try {
+            await axios.post("https://techsign.store/api/update-payment-status", {
+              order_id: result.order_id,
+              status: "failed",
+            });
+            alert("Pembayaran gagal.");
+          } catch (error) {
+            console.error("Error updating payment status:", error);
+          }
+        },
+        onClose: function () {
+          console.log("Payment Dialog Closed");
+        },
+      });
+    } catch (error) {
+      console.error("Error creating transaction:", error);
+    } finally {
+      isPaymentInProgress = false;
+    }
   };
 
   return (
@@ -76,6 +138,7 @@ const Pembayaran = () => {
                   <th className="px-4 py-2 border border-gray-200">Tanggal</th>
                   <th className="px-4 py-2 border border-gray-200">Dokter</th>
                   <th className="px-4 py-2 border border-gray-200">Catatan</th>
+                  <th className="px-4 py-2 border border-gray-200">Total Biaya</th>
                   <th className="px-4 py-2 border border-gray-200">Status</th>
                   <th className="px-4 py-2 border border-gray-200">Aksi</th>
                 </tr>
@@ -96,6 +159,7 @@ const Pembayaran = () => {
                       {consultation.appointment.doctor.name}
                     </td>
                     <td className="px-4 py-2 border">{consultation.notes}</td>
+                    <td className="px-4 py-2 border">{consultation.total_price}</td>
                     <td className="px-4 py-2 border">{consultation.status}</td>
                     <td className="px-4 py-2 border">
                       <button
