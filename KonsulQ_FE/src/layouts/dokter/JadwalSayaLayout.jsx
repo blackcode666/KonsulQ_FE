@@ -112,7 +112,7 @@ const JadwalSayaLayout = () => {
                     <td>
                       {appointment.status === "scheduled" && showConsultButton ? (
                         <a
-                          className="btn btn-primary" href={`/konsultasi/${appointment.id}/doctor`}
+                          className="btn btn-primary" href={`/konsultasi/${appointment.id}`}
                         >
                           Masuk Konsultasi
                         </a>

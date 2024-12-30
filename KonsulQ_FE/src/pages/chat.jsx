@@ -138,8 +138,11 @@ const ChatKonsul = () => {
                                         >
                                             {/* Menampilkan nama pengirim */}
                                             <div className={`font-semibold ${message.sender === userInfo.userInfo.role ? "text-white" : "text-gray-800"}`}>
-                                                {message.sender === 'doctor' ? message.consultation.appointment.doctor.name : message.consultation.appointment.patient.name}
-                                                {/*  */}
+                                                {message.sender === 'doctor' && message.consultation && message.consultation.appointment && message.consultation.appointment.doctor
+                                                    ? message.consultation.appointment.doctor.name
+                                                    : message.sender === 'patient' && message.consultation && message.consultation.appointment && message.consultation.appointment.patient
+                                                        ? message.consultation.appointment.patient.name
+                                                        : 'Unknown'}
                                             </div>
 
                                             {/* Menampilkan pesan */}

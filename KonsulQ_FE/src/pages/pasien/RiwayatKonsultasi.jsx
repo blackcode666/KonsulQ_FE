@@ -80,9 +80,9 @@ const RiwayatKonsultasi = () => {
 
                 // Menentukan apakah tombol konsultasi muncul berdasarkan waktu dan status
                 const showConsultButton =
-                  appointment.status === "scheduled" &&
                   currentTime >= appointmentStartTime &&
                   currentTime <= appointmentEndTime;
+                console.log(showConsultButton);
 
                 return (
                   <tr key={appointment.id}>
@@ -92,22 +92,39 @@ const RiwayatKonsultasi = () => {
                     <td>{new Date(appointment.appointment_end).toLocaleTimeString()}</td>
                     <td>{appointment.status}</td>
                     <td>
-                      {appointment.status === "scheduled" || appointment.status === "processed" && showConsultButton ? (
+                      {showConsultButton && appointment.status === "scheduled" ? (
                         <a
                           className="bg-blue-500 text-white py-1 px-1 rounded hover:bg-blue-600 transition duration-200"
                           href={`/konsultasi/${appointment.id}`}
                         >
-                          masuk
+                          mulai
+                        </a>
+                      ) : showConsultButton && appointment.status === "processed" ? (
+                        <a
+                          className="bg-blue-500 text-white py-1 px-1 rounded hover:bg-blue-600 transition duration-200"
+                          href={`/konsultasi/${appointment.id}`}
+                        >
+                          kembali
+                        </a>
+                      ) : appointment.status === "completed" ? (
+                        <a
+                          className="bg-success-500 text-white py-1 px-1 rounded hover:bg-success-600 transition duration-200"
+                          href="#"
+                        >
+                          selesai
+                        </a>
+                      ) : appointment.status === "pending" ? (
+                        <a
+                          className="bg-gray-500 text-white py-1 px-1 rounded hover:bg-gray-600 transition duration-200"
+                          href={`/pembayaran`}
+                        >
+                          bayar
                         </a>
                       ) : (
-                          <a
-                            className="bg-gray-500 text-white py-1 px-1 rounded hover:bg-gray-600 transition duration-200"
-                            href={`/pembayaran`}
-                          >
-                            bayar
-                          </a>
+                        ""
                       )}
-                      
+
+
                     </td>
 
                   </tr>
