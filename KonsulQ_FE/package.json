@@ -20,6 +20,8 @@
     "datatables.net-responsive-dt": "^3.0.3",
     "datatables.net-select-dt": "^2.1.0",
     "firebase": "^11.1.0",
+    "laravel-echo": "^1.17.1",
+    "pusher-js": "^8.4.0-rc2",
     "react": "^18.3.1",
     "react-calendar": "^5.1.0",
     "react-chartjs-2": "^5.2.0",

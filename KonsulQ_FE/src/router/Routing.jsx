@@ -43,6 +43,7 @@ import JadwalKonsultasi from "../pages/pasien/JadwalKonsultasi";
 import RiwayatKonsultasi from "../pages/pasien/RiwayatKonsultasi";
 import Pembayaran from "../pages/pasien/Pembayaran";
 import MessagesPasien from "../pages/pasien/MessagePasien";
+import ChatKonsul from "../pages/chat";
 
 
 
@@ -78,6 +79,9 @@ const Routing = () => {
       <Route path="/konsultasi-online" element={<Middleware allowedRoles={['doctor']}><KonsultasiOnline /></Middleware>} />
       <Route path="/laporan" element={<Middleware allowedRoles={['doctor']}><Laporan /></Middleware>} />
       <Route path="/messages-dokter" element={<Middleware allowedRoles={['doctor']}><MessagesDokter /></Middleware>} />
+
+      <Route path="/konsultasi/:id" element={<Middleware allowedRoles={['doctor', 'patient']}><ChatKonsul /></Middleware>} />
+
 
       {/* Pasien Routes */}
       <Route path="/dashboard-pasien" element={<Middleware allowedRoles={['patient']}><DashboardPasien /></Middleware>} />
