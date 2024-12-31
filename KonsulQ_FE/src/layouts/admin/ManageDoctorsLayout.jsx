@@ -212,8 +212,8 @@ const ManageDoctorsLayout = () => {
                   required={!isEdit}
                 >
                   <option value="">Jenis Kelamin</option>
-                  <option value="0">Laki-laki</option>
-                  <option value="1">Perempuan</option>
+                  <option value="0">Perempuan</option>
+                  <option value="1">Laki-laki</option>
                 </select>
                 {errors.gender && <p className="text-red-500 text-sm">{errors.gender[0]}</p>}
 
@@ -347,7 +347,7 @@ const ManageDoctorsLayout = () => {
                   <td className="py-2">{index + 1}</td>
                   <td className="py-2">{doctor.user.name}</td>
                   <td className="py-2">
-                    {doctor.user.gender === 0 ? "Laki-laki" : "Perempuan"}
+                    {doctor.user.gender === 0 ? "Wanita" : "Pria"}
                   </td>
                   <td className="py-2">{doctor.user.email}</td>
                   <td className="py-2">{doctor.user.phone_number}</td>
