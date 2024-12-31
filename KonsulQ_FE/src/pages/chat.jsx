@@ -112,7 +112,7 @@ const ChatKonsul = () => {
 
     return (
         <div className="flex h-screen">
-            {userInfo.role === "doctor" ? <SidebarDokter /> : <SidebarPasien />}
+            {userInfo.userInfo.role === "doctor" ? <SidebarDokter /> : <SidebarPasien />}
             <div className="flex-1 ml-64 bg-gray-50 flex flex-col">
                 <Navbar />
                 <main className="flex flex-col flex-grow p-6 w-[100%] mx-auto">
