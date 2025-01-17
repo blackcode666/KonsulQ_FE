@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../../context/AuthContext"; // Import useAuth dari AuthContext
+import logo from "../../assets/LOGO.png"; // Pastikan path logo sudah benar
 
 const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -95,6 +96,11 @@ const Navbar = () => {
           </button>
 
           <div className="flex items-center gap-2">
+            <img
+              src={logo}
+              alt="KonsulQ Logo"
+              className="w-8 h-8 object-contain"
+            />
             <Link to="/" className="text-white text-2xl font-bold">
               KONSUL<span className="text-teal-200">Q</span>
             </Link>
